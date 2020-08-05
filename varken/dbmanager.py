@@ -27,8 +27,8 @@ class DBManager(object):
         except ConnectionError:
             self.logger.critical("Error testing connection to InfluxDB. Please check your url/hostname")
             if counter>9:
-                exit(1)
             break
+            exit(1)
     return flag
             
 
