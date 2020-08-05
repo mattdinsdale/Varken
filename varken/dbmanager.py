@@ -15,12 +15,22 @@ class DBManager(object):
         self.influx = InfluxDBClient(host=self.server.url, port=self.server.port, username=self.server.username,
                                      password=self.server.password, ssl=self.server.ssl, database='varken',
                                      verify_ssl=self.server.verify_ssl)
+    flag = False
+    counter = 0
+    while True:
+        counter += 1
         try:
             version = self.influx.request('ping', expected_response_code=204).headers['X-Influxdb-Version']
             self.logger.info('Influxdb version: %s', version)
+            flag = True
+           break
         except ConnectionError:
             self.logger.critical("Error testing connection to InfluxDB. Please check your url/hostname")
-            exit(1)
+            if counter>9:
+                exit(1)
+           break
+    return flag
+            
 
         databases = [db['name'] for db in self.influx.get_list_database()]
 
