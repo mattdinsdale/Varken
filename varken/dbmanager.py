@@ -23,12 +23,12 @@ class DBManager(object):
             version = self.influx.request('ping', expected_response_code=204).headers['X-Influxdb-Version']
             self.logger.info('Influxdb version: %s', version)
             flag = True
-           break
+            break
         except ConnectionError:
             self.logger.critical("Error testing connection to InfluxDB. Please check your url/hostname")
             if counter>9:
                 exit(1)
-           break
+            break
     return flag
             
 
